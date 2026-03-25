@@ -4,7 +4,6 @@
     "slug": "assistencia-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
       "resizeMode": "contain",
@@ -15,9 +14,6 @@
         "backgroundColor": "#1a237e"
       },
       "package": "com.suaigreja.assistencia"
-    },
-    "plugins": [
-      "@react-native-async-storage/async-storage"
-    ]
+    }
   }
 }
