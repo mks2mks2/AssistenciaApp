@@ -1,0 +1,32 @@
+workflows:
+  android-release:
+    name: Android APK
+    max_build_duration: 60
+    environment:
+      node: 18.17.0
+      java: 17
+    scripts:
+      - name: Instalar dependências
+        script: npm install
+
+      - name: Instalar Expo CLI
+        script: npm install -g expo-cli @expo/cli
+
+      - name: Gerar projeto Android nativo
+        script: npx expo prebuild --platform android --clean
+
+      - name: Build APK debug
+        script: |
+          cd android
+          ./gradlew assembleRelease
+
+    artifacts:
+      - android/app/build/outputs/apk/release/*.apk
+
+    publishing:
+      email:
+        recipients:
+          - seu@email.com
+        notify:
+          success: true
+          failure: true
