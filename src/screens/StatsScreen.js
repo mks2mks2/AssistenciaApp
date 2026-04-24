@@ -38,7 +38,7 @@ export default function StatsScreen({ route }) {
   const media = mediaGeral;
 
   const maiorReuniao = reunioes.reduce((a, r) => (r.zoom + r.presencial > (a ? a.zoom + a.presencial : 0) ? r : a), null);
-  const menorReuniao = reunioes.reduce((a, r) => (r.zoom + r.presencial < (a ? a.zoom + a.presencial : Infinity) ? r : a), null);
+  const menorReuniao = reunioesSemZero.reduce((a, r) => (r.zoom + r.presencial < (a ? a.zoom + a.presencial : Infinity) ? r : a), null);
 
   const gerarTexto = () => {
     let texto = `📊 RELATÓRIO DE ASSISTÊNCIA\n`;
@@ -85,7 +85,7 @@ export default function StatsScreen({ route }) {
         {/* Cards resumo */}
         <View style={styles.cardsRow}>
           <View style={[styles.summaryCard, { backgroundColor: '#1a237e' }]}>
-            <Text style={styles.summaryNum}>{reunioes.length}</Text>
+            <Text style={styles.summaryNum}>{reunioesSemZero.length}</Text>
             <Text style={styles.summaryLabel}>Reuniões</Text>
           </View>
           <View style={[styles.summaryCard, { backgroundColor: '#283593' }]}>
@@ -106,6 +106,17 @@ export default function StatsScreen({ route }) {
           <View style={[styles.summaryCard, { backgroundColor: '#00897b', flex: 1 }]}>
             <Text style={styles.summaryNum}>{totalPres}</Text>
             <Text style={styles.summaryLabel}>🪑 Total Presencial</Text>
+          </View>
+        </View>
+
+        <View style={styles.cardsRow}>
+          <View style={[styles.summaryCard, { backgroundColor: '#4527a0', flex: 1 }]}>
+            <Text style={styles.summaryNum}>{mediaQuarta}</Text>
+            <Text style={styles.summaryLabel}>Média Quarta</Text>
+          </View>
+          <View style={[styles.summaryCard, { backgroundColor: '#512da8', flex: 1 }]}>
+            <Text style={styles.summaryNum}>{mediaSabado}</Text>
+            <Text style={styles.summaryLabel}>Média Sábado</Text>
           </View>
         </View>
 
