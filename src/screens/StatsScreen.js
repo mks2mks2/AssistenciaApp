@@ -21,10 +21,21 @@ export default function StatsScreen({ route }) {
     getReunioesByMonth(year, month).then(setReunioes);
   }, []);
 
+  const reunioesSemZero = reunioes.filter(r => r.zoom + r.presencial > 0);
+
   const totalZoom = reunioes.reduce((a, r) => a + r.zoom, 0);
   const totalPres = reunioes.reduce((a, r) => a + r.presencial, 0);
   const totalGeral = totalZoom + totalPres;
-  const media = reunioes.length ? (totalGeral / reunioes.length).toFixed(1) : 0;
+
+  const reunioesQuarta = reunioesSemZero.filter(r => new Date(r.data).getDay() === 3);
+  const reunioesSabado = reunioesSemZero.filter(r => new Date(r.data).getDay() === 6);
+
+  const somarTotal = arr => arr.reduce((a, r) => a + r.zoom + r.presencial, 0);
+
+  const mediaQuarta = reunioesQuarta.length ? (somarTotal(reunioesQuarta) / reunioesQuarta.length).toFixed(1) : '—';
+  const mediaSabado = reunioesSabado.length ? (somarTotal(reunioesSabado) / reunioesSabado.length).toFixed(1) : '—';
+  const mediaGeral  = reunioesSemZero.length  ? (somarTotal(reunioesSemZero)  / reunioesSemZero.length).toFixed(1)  : '—';
+
   const maiorReuniao = reunioes.reduce((a, r) => (r.zoom + r.presencial > (a ? a.zoom + a.presencial : 0) ? r : a), null);
   const menorReuniao = reunioes.reduce((a, r) => (r.zoom + r.presencial < (a ? a.zoom + a.presencial : Infinity) ? r : a), null);
 
@@ -44,15 +55,11 @@ export default function StatsScreen({ route }) {
       texto += `${'─'.repeat(26)}\n`;
     });
 
-    texto += `\n📈 RESUMO DO MÊS\n`;
+    texto += `\n📈 MÉDIAS DO MÊS\n`;
     texto += `${'─'.repeat(32)}\n`;
-    texto += `Total de reuniões: ${reunioes.length}\n`;
-    texto += `Total Zoom: ${totalZoom}\n`;
-    texto += `Total Presencial: ${totalPres}\n`;
-    texto += `Total Geral: ${totalGeral}\n`;
-    texto += `Média por reunião: ${media}\n`;
-    if (maiorReuniao) texto += `Maior assistência: ${formatDate(maiorReuniao.data)} (${maiorReuniao.zoom + maiorReuniao.presencial})\n`;
-    if (menorReuniao) texto += `Menor assistência: ${formatDate(menorReuniao.data)} (${menorReuniao.zoom + menorReuniao.presencial})\n`;
+    texto += `Média Quarta-feira: ${mediaQuarta}\n`;
+    texto += `Média Sábado: ${mediaSabado}\n`;
+    texto += `Média Geral: ${mediaGeral}\n`;
 
     return texto;
   };
